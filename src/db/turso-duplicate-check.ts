@@ -1,6 +1,6 @@
-import { getClient } from "./db-client.ts";
+import { getClient } from "./turso-client.ts";
 
-// SQLite 系はバインド変数数に上限(既定999)があります。安全のため分割実行します。	
+// SQLite 系はバインド変数数に上限(既定999)があります。安全のため分割実行します。
 function chunk<T>(arr: T[], size: number): T[][] {
 	const out: T[][] = [];
 	for (let i = 0; i < arr.length; i += size) {

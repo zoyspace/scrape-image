@@ -1,6 +1,4 @@
-
-import { getClient } from "./db-client.ts";
-
+import { getClient } from "./turso-client.ts";
 
 // 入力データ型
 export type InsertPostInput = {
@@ -29,6 +27,7 @@ export type LibSQLExecuteResult = {
 
 // libSQL/Turso のトランザクションで UPSERT + 画像の一括投入
 export async function insertPostsTurso(
+	groupName: string,
 	insertData: InsertPostInput[],
 ): Promise<InsertResult> {
 	const client = getClient();
@@ -126,7 +125,7 @@ export async function insertPostsTurso(
 				// imageInserted += imgResults.map(r => r.rowsAffected ?? 0).reduce((a, b) => a + b, 0);
 			}
 		}
-
+		console.log(groupName, "postInserted:", postInserted, "imageInserted:", imageInserted);
 		await tx.commit();
 		return { postInserted, imageInserted, postUpsertedIds: postIds };
 	} catch (err) {

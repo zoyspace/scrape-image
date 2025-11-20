@@ -1,9 +1,9 @@
-import { getClient } from "./db-client.ts";
+import { getClient } from "./turso-client.ts";
 
 export async function ensureSchema() {
-    const client = getClient();
+	const client = getClient();
 
-    await client.execute(`
+	await client.execute(`
     PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS posts(
       id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,7 +18,7 @@ export async function ensureSchema() {
     );
     `);
 
-    await client.execute(`
+	await client.execute(`
     CREATE TABLE IF NOT EXISTS images(
       id         INTEGER PRIMARY KEY AUTOINCREMENT,
       postId     INTEGER NOT NULL,
@@ -31,12 +31,12 @@ export async function ensureSchema() {
     );
     `);
 
-    await client.execute(`
+	await client.execute(`
     CREATE INDEX IF NOT EXISTS idx_posts_postedAt
       ON posts (postedAt);
     `);
 
-    await client.execute(`
+	await client.execute(`
     CREATE INDEX IF NOT EXISTS idx_images_postedAt
       ON images (postedAt);
   `);

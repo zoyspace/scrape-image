@@ -51,7 +51,7 @@ export async function getBlogImages(param: SakamichiType) {
 		),
 	);
 
-	insertPostsTurso(newArticles);
+	insertPostsTurso(groupName, newArticles);
 
 	const end = Date.now();
 	console.info(
