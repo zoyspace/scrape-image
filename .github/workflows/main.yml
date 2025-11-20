@@ -1,0 +1,53 @@
+name: scrape-image
+
+on:
+  # 手動実行
+  workflow_dispatch:
+
+  # main ブランチに変更があったときも動かす（テスト兼ねる）
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "package.json"
+      - "bun.lockb"
+      - ".github/workflows/scrape-image.yml"
+
+  # 8時間に一回（UTC 基準）
+  schedule:
+    - cron: "0 */8 * * *"
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+
+    # 同時に何本も走らないようにする（長時間スクレイピング対策）
+    concurrency:
+      group: scrape-image
+      cancel-in-progress: false
+
+    env:
+      # ログなどで日本時間を使いたい場合
+      TZ: Asia/Tokyo
+
+      # DBやAPIトークンなどがあればここに（GitHub Secrets から）
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      # 他にも必要ならここに追加
+      # SOME_API_KEY: ${{ secrets.SOME_API_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest  # 公式推奨の書き方
+
+      - name: Install dependencies
+        run: bun install
+
+      # ここがメイン：src/main.ts を実行
+      - name: Run scraper
+        run: bun src/main.ts
