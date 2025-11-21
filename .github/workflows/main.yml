@@ -5,13 +5,13 @@ on:
   workflow_dispatch:
 
   # main ブランチに変更があったときも実行（テスト兼ねる）
-  push:
-    branches: [main]
-    paths:
-      - "src/**"
-      - "package.json"
-      - "bun.lock*"
-      - ".github/workflows/scrape-image.yml"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "src/**"
+  #     - "package.json"
+  #     - "bun.lock*"
+  #     - ".github/workflows/scrape-image.yml"
 
   # 8時間おきに自動実行（UTC 基準）
   schedule:
