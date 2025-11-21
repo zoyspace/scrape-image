@@ -32,6 +32,9 @@ jobs:
       # ▼ GitHub Secrets に設定しておく（後で説明）
       TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
       TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+      NOTION_DATA_SOURCE_ID: ${{ secrets.NOTION_DATA_SOURCE_ID }}
+      NOTION_VERSION: ${{ secrets.NOTION_VERSION }}
 
     steps:
       - name: Checkout repository
