@@ -1,29 +1,8 @@
 import { getClient } from "./turso-client.ts";
+import type { InsertPostInput } from "../types/types.ts";
+import type { InsertResult } from "../types/types.ts";
+import type { LibSQLExecuteResult } from "../types/types.ts";
 
-// 入力データ型
-export type InsertPostInput = {
-	memberName: string;
-	title: string;
-	articleUrl: string;
-	postedAt: string; // "YYYY-MM-DD HH:MM:SS"
-	urlId: number;
-	groupName: string;
-	imageUrls: string[];
-};
-
-export type InsertResult = {
-	postInserted: number;
-	imageInserted: number;
-	postUpsertedIds: number[];
-};
-export type LibSQLExecuteResult = {
-	columns: string[];
-	columnTypes: string[];
-	rows: Record<string, unknown>[];
-	rowsAffected: number; // 必須
-	lastInsertRowid?: bigint; // INSERT 時のみ
-	toJSON: () => unknown;
-};
 
 // libSQL/Turso のトランザクションで UPSERT + 画像の一括投入
 export async function insertPostsTurso(

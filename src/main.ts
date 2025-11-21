@@ -9,6 +9,7 @@ import type {
 import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
 import { fetchBodyImageUrls } from "./fetchBody.ts";
 import { fetchNewArticleList } from "./fetchNew.ts";
+import {insertArticlesToNotion} from "./notion/to-notion-api.ts"
 
 
 export async function getBlogImages(param: SakamichiType) {
@@ -51,7 +52,8 @@ export async function getBlogImages(param: SakamichiType) {
 		),
 	);
 
-	insertPostsTurso(groupName, newArticles);
+	await insertPostsTurso(groupName,newArticles);
+	insertArticlesToNotion(newArticles);
 
 	const end = Date.now();
 	console.info(
