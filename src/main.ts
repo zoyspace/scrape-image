@@ -53,7 +53,7 @@ export async function getBlogImages(param: SakamichiType) {
 	);
 
 	await insertPostsTurso(groupName,newArticles);
-	insertArticlesToNotion(newArticles);
+	await insertArticlesToNotion(newArticles);
 
 	const end = Date.now();
 	console.info(

@@ -13,17 +13,21 @@ export type ArticleWithImageType = {
 // 環境変数
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const NOTION_VERSION = process.env.NOTION_VERSION ?? "2025-09-03"; // あなたの環境に合わせて
-const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID ;
+const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID;
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * ArticleWithImageType 1件を Notion に登録する
  */
- async function createNotionPageFromArticle(
-	article: ArticleWithImageType,imageUrl:string,indexStr:string
+async function createNotionPageFromArticle(
+	article: ArticleWithImageType,
+	imageUrl: string,
+	indexStr: string,
 ) {
 	if (!NOTION_API_KEY) throw new Error("NOTION_API_KEY is not set");
-	if (!NOTION_DATA_SOURCE_ID) throw new Error("NOTION_DATA_SOURCE_ID is not set");
+	if (!NOTION_DATA_SOURCE_ID)
+		throw new Error("NOTION_DATA_SOURCE_ID is not set");
 	if (!NOTION_VERSION) throw new Error("NOTION_VERSION is not set");
 
 	const pageTitle = `[${article.groupName}] ${article.memberName} #${article.urlId} image${indexStr}`;
@@ -36,7 +40,7 @@ const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID ;
 		properties: {
 			// ページタイトル
 			Title: {
-				title: [{ type: "text",text: { content: pageTitle } }],
+				title: [{ type: "text", text: { content: pageTitle } }],
 			},
 			// DB構造に合わせた各列
 			postedAt: {
@@ -49,7 +53,7 @@ const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID ;
 					},
 				],
 			},
-			
+
 			member: {
 				rich_text: [
 					{
@@ -86,12 +90,12 @@ const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID ;
 				},
 			},
 			blog: {
-						type: "url",
-						url:  article.articleUrl,
+				type: "url",
+				url: article.articleUrl,
 			},
 			image: {
-						type: "url",
-						url:  imageUrl,
+				type: "url",
+				url: imageUrl,
 			},
 		},
 	};
@@ -125,10 +129,11 @@ const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID ;
 export async function insertArticlesToNotion(articles: ArticleWithImageType[]) {
 	for (const article of articles) {
 		console.log("Inserting article:", article.title);
-		for (const [i,imageUrl] of article.imageUrls.entries()){
-			const indexStr = String(i+1).padStart(2, "0");
+		for (const [i, imageUrl] of article.imageUrls.entries()) {
+			const indexStr = String(i + 1).padStart(2, "0");
 
-			await createNotionPageFromArticle(article,imageUrl,indexStr);
+			await createNotionPageFromArticle(article, imageUrl, indexStr);
+			await sleep(350); // Rate limit: 3 requests per second
 		}
 	}
 }
