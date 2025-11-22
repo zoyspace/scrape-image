@@ -30,7 +30,7 @@ async function createNotionPageFromArticle(
 		throw new Error("NOTION_DATA_SOURCE_ID is not set");
 	if (!NOTION_VERSION) throw new Error("NOTION_VERSION is not set");
 
-	const pageTitle = `[${article.groupName}] ${article.memberName} #${article.urlId} image${indexStr}`;
+	const pageTitle = `[${article.memberName} #${article.urlId} image${indexStr}`;
 
 	const body = {
 		parent: {
