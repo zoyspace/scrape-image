@@ -30,7 +30,7 @@ async function createNotionPageFromArticle(
 		throw new Error("NOTION_DATA_SOURCE_ID is not set");
 	if (!NOTION_VERSION) throw new Error("NOTION_VERSION is not set");
 
-	const pageTitle = `[${article.memberName} #${article.urlId} image${indexStr}`;
+	const pageTitle = `${article.memberName} #${article.urlId} image${indexStr}`;
 
 	const body = {
 		parent: {
@@ -118,8 +118,6 @@ async function createNotionPageFromArticle(
 			`Notion API error: ${res.status} ${res.statusText} - ${(data as any)?.message ?? ""}`,
 		);
 	}
-
-	console.log("Created page:", (data as any).id, (data as any).url);
 	return data;
 }
 

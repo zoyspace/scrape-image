@@ -1,10 +1,10 @@
-import { getClient } from "./turso-client.ts";
+// src/db/turso-insert.ts
 import type { InsertPostInput } from "../types/types.ts";
-import type { InsertResult } from "../types/types.ts";
 import type { LibSQLExecuteResult } from "../types/types.ts";
+import type { InsertResult } from "../types/types.ts";
+import { getClient } from "./turso-client.ts";
 
 
-// libSQL/Turso のトランザクションで UPSERT + 画像の一括投入
 export async function insertPostsTurso(
 	groupName: string,
 	insertData: InsertPostInput[],
@@ -24,12 +24,10 @@ export async function insertPostsTurso(
 		for (const p of insertData) {
 			// 1) posts を UPSERT して id を取得（SQLite 互換の ON CONFLICT DO UPDATE ... RETURNING）
 			const postRes: LibSQLExecuteResult = await tx.execute({
-				sql: `
-          INSERT INTO posts (groupName, memberName, title, urlId, articleUrl, postedAt)
+				sql: `INSERT INTO posts (groupName, memberName, title, urlId, articleUrl, postedAt)
           VALUES (:groupName, :memberName, :title, :urlId, :articleUrl, :postedAt)
           ON CONFLICT(groupName, urlId) DO NOTHING
-          RETURNING id;
-        `,
+          RETURNING id;`,
 				args: {
 					":groupName": p.groupName,
 					":memberName": p.memberName,
