@@ -1,16 +1,15 @@
 import pLimit from "p-limit";
+import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
 import { duplicateCheckTurso } from "./db/turso-duplicate-check.ts";
 import { insertPostsTurso } from "./db/turso-insert.ts";
+import { fetchBodyImageUrls } from "./fetchBody.ts";
+import { fetchNewArticleList } from "./fetchNew.ts";
+import { insertArticlesToNotion } from "./notion/to-notion-api.ts";
 import type {
 	ArticleType,
 	ArticleWithImageType,
 	SakamichiType,
 } from "./types/types.ts";
-import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
-import { fetchBodyImageUrls } from "./fetchBody.ts";
-import { fetchNewArticleList } from "./fetchNew.ts";
-import {insertArticlesToNotion} from "./notion/to-notion-api.ts"
-
 
 export async function getBlogImages(param: SakamichiType) {
 	const start = Date.now();
@@ -28,7 +27,9 @@ export async function getBlogImages(param: SakamichiType) {
 
 	const urlIdList = newBlogs.map((blog) => blog.urlId);
 	const notFoundTurso = await duplicateCheckTurso(groupName, urlIdList);
-	const blogList = newBlogs.filter((item) => notFoundTurso.includes(item.urlId));
+	const blogList = newBlogs.filter((item) =>
+		notFoundTurso.includes(item.urlId),
+	);
 
 	const newArticles: ArticleWithImageType[] = await Promise.all(
 		blogList.map((Article: ArticleType) =>
@@ -52,7 +53,7 @@ export async function getBlogImages(param: SakamichiType) {
 		),
 	);
 
-	await insertPostsTurso(groupName,newArticles);
+	await insertPostsTurso(groupName, newArticles);
 	await insertArticlesToNotion(newArticles);
 
 	const end = Date.now();

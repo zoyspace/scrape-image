@@ -1,9 +1,10 @@
 // src/db/turso-insert.ts
-import type { InsertPostInput } from "../types/types.ts";
-import type { LibSQLExecuteResult } from "../types/types.ts";
-import type { InsertResult } from "../types/types.ts";
+import type {
+	InsertPostInput,
+	InsertResult,
+	LibSQLExecuteResult,
+} from "../types/types.ts";
 import { getClient } from "./turso-client.ts";
-
 
 export async function insertPostsTurso(
 	groupName: string,
@@ -65,11 +66,9 @@ export async function insertPostsTurso(
 				// libSQL は batch をサポート（2024以降）しているので、まとめて実行して往復回数を減らす。
 				const imgResults = await tx.batch(
 					p.imageUrls.map((url) => ({
-						sql: `
-              INSERT INTO images (postId, memberName, postedAt, imageUrl)
-              VALUES (:postId, :memberName, :postedAt, :imageUrl)
-              ON CONFLICT(postId, imageUrl) DO NOTHING;
-            `,
+						sql: `INSERT INTO images (postId, memberName, postedAt, imageUrl)
+               				VALUES (:postId, :memberName, :postedAt, :imageUrl)
+               				ON CONFLICT(postId, imageUrl) DO NOTHING;`,
 						args: {
 							":postId": postId,
 							":memberName": p.memberName,
@@ -102,7 +101,13 @@ export async function insertPostsTurso(
 				// imageInserted += imgResults.map(r => r.rowsAffected ?? 0).reduce((a, b) => a + b, 0);
 			}
 		}
-		console.log(groupName, "postInserted:", postInserted, "imageInserted:", imageInserted);
+		console.log(
+			groupName,
+			"postInserted:",
+			postInserted,
+			"imageInserted:",
+			imageInserted,
+		);
 		await tx.commit();
 		return { postInserted, imageInserted, postUpsertedIds: postIds };
 	} catch (err) {
