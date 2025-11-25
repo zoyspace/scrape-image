@@ -16,9 +16,9 @@ export function getClient(): Client {
 	return _client;
 }
 
-export async function closeClient() {
+export function closeClient() {
 	if (_client) {
-		await _client.close();
+		_client.close();
 		_client = null;
 	}
 }
