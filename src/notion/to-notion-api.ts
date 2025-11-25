@@ -126,7 +126,7 @@ async function createNotionPageFromArticle(
  */
 export async function insertArticlesToNotion(articles: ArticleWithImageType[]) {
 	for (const article of articles) {
-		console.log("Inserting article:", article.title);
+		console.log("Inserting article:", article.memberName);
 		for (const [i, imageUrl] of article.imageUrls.entries()) {
 			const indexStr = String(i + 1).padStart(2, "0");
 
