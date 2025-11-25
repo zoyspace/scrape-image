@@ -1,5 +1,6 @@
 import pLimit from "p-limit";
 import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
+import { getClient, closeClient } from "./db/turso-client.ts";
 import { duplicateCheckTurso } from "./db/turso-duplicate-check.ts";
 import { insertPostsTurso } from "./db/turso-insert.ts";
 import { fetchBodyImageUrls } from "./fetchBody.ts";
@@ -13,7 +14,7 @@ import type {
 
 export async function getBlogImages(param: SakamichiType) {
 	const start = Date.now();
-	const limit = pLimit(2); // 最大5並列
+	const limit = pLimit(3); // 最大5並列
 	const { groupName, baseUrl, newPages, newListSelectors, bodySelectors } =
 		param;
 	console.info(`${groupName} Fetching new articles for ...`);
@@ -54,16 +55,20 @@ export async function getBlogImages(param: SakamichiType) {
 	);
 
 	await insertPostsTurso(groupName, newArticles);
-	await insertArticlesToNotion(newArticles);
 
 	const end = Date.now();
 	console.info(
 		`${groupName} Completed processing in ${(end - start) / 1000} seconds`,
 	);
+	return newArticles;
 }
-
 if (import.meta.main) {
-	await getBlogImages(hinatazaka);
-	await getBlogImages(nogizaka);
-	await getBlogImages(sakurazaka);
+	getClient();
+	const hinataResult = await getBlogImages(hinatazaka);
+	const nogizakaResult = await getBlogImages(nogizaka);
+	const sakurazakaResult = await getBlogImages(sakurazaka);
+	closeClient();
+
+	const newArticles = [...hinataResult, ...nogizakaResult, ...sakurazakaResult];
+	await insertArticlesToNotion(newArticles);
 }
