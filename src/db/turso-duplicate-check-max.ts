@@ -1,6 +1,6 @@
 import { getClient } from "./turso-client.ts";
 
-export async function duplicateCheckTurso(
+export async function duplicateCheckTursoMax(
 	groupName: string,
 	inputUrlIds: number[],
 ): Promise<number[]> {
@@ -9,22 +9,16 @@ export async function duplicateCheckTurso(
 	const existingSet = new Set<number>();
 
 	if (inputUrlIds.length > 0) {
-		const names = inputUrlIds.map((_, i) => `:id${i}`);
-		const sql = `SELECT urlId FROM posts WHERE groupName = :groupName AND urlId 
-			IN (${names.join(",")})`;
-
-		const args: Record<string, number | string> = {
-			":groupName": groupName,
-		};
-		inputUrlIds.forEach((v, i) => {
-			args[`:id${i}`] = v;
+		const sql =
+			"SELECT max(urlId) as maxId FROM posts WHERE groupName = :groupName";
+		const maxRes = await client.execute({
+			sql,
+			args: { ":groupName": groupName },
 		});
+		const maxUrlId = Number(maxRes.rows[0]?.maxId ?? 0);
 
-		const res = await client.execute({ sql, args });
-		for (const row of res.rows) {
-			const urlId = row.urlId;
-			const v = Number(urlId);
-			if (Number.isFinite(v)) existingSet.add(v);
+		for (const inputUrlId of inputUrlIds) {
+			if (inputUrlId <= maxUrlId) existingSet.add(inputUrlId);
 		}
 	}
 
