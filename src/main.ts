@@ -1,6 +1,7 @@
 import pLimit from "p-limit";
+
 import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
-import { getClient, closeClient } from "./db/turso-client.ts";
+import { closeClient, getClient } from "./db/turso-client.ts";
 import { duplicateCheckTursoMax } from "./db/turso-duplicate-check-max.ts";
 import { insertPostsTurso } from "./db/turso-insert.ts";
 import { fetchBodyImageUrls } from "./fetchBody.ts";
@@ -63,6 +64,7 @@ export async function getBlogImages(param: SakamichiType) {
 	);
 	return newArticles;
 }
+
 if (import.meta.main) {
 	getClient();
 	const hinataResult = await getBlogImages(hinatazaka);
