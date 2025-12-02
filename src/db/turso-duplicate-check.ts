@@ -33,8 +33,10 @@ export async function duplicateCheckTurso(
 	console.log(
 		`${groupName} Duplicate check found:${existingSet.size}, not found:${notFound.length}.`,
 	);
-	if (inputUrlIds.length === notFound.length)
-		console.log(groupName, "⚠️最新記事取得漏れの可能性があります!!!");
+	if (inputUrlIds.length === notFound.length){
+		console.warn(groupName, "⚠️最新記事取得漏れの可能性があります!!!",inputUrlIds.join(","));
+		process.exitCode = 1; // github actions でエラー処理を実行(LINE通知)
+	}
 
 	return notFound;
 }

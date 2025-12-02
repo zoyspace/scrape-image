@@ -2,7 +2,7 @@ import pLimit from "p-limit";
 
 import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
 import { closeClient, getClient } from "./db/turso-client.ts";
-import { duplicateCheckTursoMax } from "./db/turso-duplicate-check-max.ts";
+import { duplicateCheckTurso } from "./db/turso-duplicate-check.ts";
 import { insertPostsTurso } from "./db/turso-insert.ts";
 import { fetchBodyImageUrls } from "./fetchBody.ts";
 import { fetchNewArticleList } from "./fetchNew.ts";
@@ -29,7 +29,7 @@ export async function getBlogImages(param: SakamichiType) {
 
 	const urlIdList = newBlogs.map((blog) => blog.urlId);
 	// const notFoundTurso = await duplicateCheckTurso(groupName, urlIdList);
-	const notFoundTurso = await duplicateCheckTursoMax(groupName, urlIdList);
+	const notFoundTurso = await duplicateCheckTurso(groupName, urlIdList);
 	const blogList = newBlogs.filter((item) =>
 		notFoundTurso.includes(item.urlId),
 	);
