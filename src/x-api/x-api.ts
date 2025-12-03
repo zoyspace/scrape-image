@@ -13,7 +13,7 @@ const client = new TwitterApi({
 /**
  * 指定した画像URLを取得して、画像付きポストを行う
  */
-async function tweetWithRemoteImage(imageUrl: string, text: string=IMAGE_URL) {
+export async function tweetWithRemoteImage(text: string,imageUrl: string=IMAGE_URL) {
   // 1. 画像を取得
   const res = await fetch(imageUrl);
   if (!res.ok) {
@@ -39,7 +39,7 @@ async function tweetWithRemoteImage(imageUrl: string, text: string=IMAGE_URL) {
     media: { media_ids: [mediaId] },
   });
 
-  console.log("投稿完了:", tweet.data);
+  // console.log("投稿完了:", tweet.data);
 }
 
 

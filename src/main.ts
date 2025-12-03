@@ -12,6 +12,7 @@ import type {
 	ArticleWithImageType,
 	SakamichiType,
 } from "./types/types.ts";
+import { xPost } from "./x-api/x-post.ts";
 
 export async function getBlogImages(param: SakamichiType) {
 	const start = Date.now();
@@ -77,4 +78,6 @@ if (import.meta.main) {
 		b.postedAt > a.postedAt ? -1 : 1);
 
 	await insertArticlesToNotion(sortedArticles);
+
+	await Promise.all(sortedArticles.map((article) => xPost(article)));
 }
