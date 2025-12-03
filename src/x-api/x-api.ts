@@ -59,7 +59,7 @@ async function postTextOnly() {
 }
 
 // await postTextOnly();
-tweetWithRemoteImage(IMAGE_URL, "URL から画像を取ってきてポスト ✨");
+// tweetWithRemoteImage(IMAGE_URL, "URL から画像を取ってきてポスト ✨");
 
  
 
