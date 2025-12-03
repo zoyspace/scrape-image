@@ -79,5 +79,6 @@ if (import.meta.main) {
 
 	await insertArticlesToNotion(sortedArticles);
 
-	await Promise.all(sortedArticles.map((article) => xPost(article)));
+	const limitedArticles = sortedArticles.slice(0, 10);
+	await Promise.all(limitedArticles.map((article) => xPost(article)));
 }
