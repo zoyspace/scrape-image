@@ -1,0 +1,66 @@
+import type { ArticleWithImageType } from "../types/types.ts";
+import { xPost } from "./x-post.ts";
+import { getClient, closeClient } from "../db/turso-client.ts";
+
+export async function xMain() {
+	const client = getClient();
+	const sqlForSelect = `
+    SELECT * FROM posts
+    WHERE isXPosted = 0
+    ORDER BY postedAt DESC
+    LIMIT 10
+    `;
+
+	const sqlForUpdate = `
+    UPDATE posts
+    SET isXPosted = 1
+    WHERE id = :id
+    `;
+	const articlesRaw = await client.execute(sqlForSelect);
+	const articles: (ArticleWithImageType & { id: number })[] =
+		articlesRaw.rows.map((row) => ({
+			id: row.id as number,
+			groupName: row.groupName as string,
+			memberName: row.memberName as string,
+			title: row.title as string,
+			articleUrl: row.articleUrl as string,
+			urlId: row.urlId as number,
+			postedAt: row.postedAt as string,
+			imageUrls: [],
+		}));
+	const ids = articles.map(() => `?`);
+	const sqlForImageSelect = `
+    SELECT * FROM images
+    WHERE postId IN (${ids.join(",")})
+    `;
+	const args: number[] = [];
+	ids.forEach((_, i) => {
+		if (!articles[i]) return;
+		args.push(articles[i].id);
+	});
+
+	const imageRaw = await client.execute(sqlForImageSelect, args);
+	const imageList = imageRaw.rows.map((row) => ({
+		postId: row.postId as number,
+		imageUrl: row.imageUrl as string,
+	}));
+
+	articles.forEach((article) => {
+		article.imageUrls.push(
+			...imageList
+				.filter((image) => image.postId === article.id)
+				.map((image) => image.imageUrl),
+		);
+	});
+
+	for (const article of articles) {
+		await xPost(article);
+		await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
+	}
+    console.log("X投稿完了");
+	closeClient();
+}
+
+if (import.meta.main) {
+    await xMain();
+}
