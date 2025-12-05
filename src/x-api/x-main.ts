@@ -54,13 +54,35 @@ export async function xMain() {
 	});
 
 	for (const article of articles) {
-		await xPost(article);
-		await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
+		try {
+			await xPost(article);
+			await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
+		} catch (error) {
+			console.error("xPostでエラーが発生しました", {
+				articleId: article.id,
+				urlId: article.urlId,
+				groupName: article.groupName,
+				error,
+			});
+
+			if (isRateLimitError(error)) {
+				console.error(
+					"レートリミット(429)に達したため、残りの記事の投稿をスキップします。",
+				);
+				break; // ← 残りの投稿は試さない
+			}
+
+			// その他のエラーはログだけ残して次の記事へ
+		}
 	}
-    console.log("X投稿完了");
+	console.log("X投稿完了");
 	closeClient();
 }
-
+// 429判定用のヘルパー関数
+function isRateLimitError(error: unknown): boolean {
+	const e = error as any;
+	return e?.code === 429 || e?.status === 429 || e?.data?.status === 429;
+}
 if (import.meta.main) {
-    await xMain();
+	await xMain();
 }

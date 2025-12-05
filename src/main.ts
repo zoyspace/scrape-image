@@ -79,5 +79,7 @@ if (import.meta.main) {
 
 	await insertArticlesToNotion(sortedArticles);
 
+	getClient();
 	await xMain();
+	closeClient();
 }
