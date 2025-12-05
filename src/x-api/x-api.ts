@@ -39,7 +39,6 @@ export async function tweetWithRemoteImage(text: string,imageUrl: string=IMAGE_U
     media: { media_ids: [mediaId] },
   });
 
-  // console.log("投稿完了:", tweet.data);
 }
 
 
