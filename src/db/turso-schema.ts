@@ -12,7 +12,8 @@ export async function ensureSchema() {
       title      TEXT,
       urlId      INTEGER NOT NULL,
       articleUrl TEXT,
-      postedAt   TEXT,  -- ISO: YYYY-MM-DD HH:MM:SS
+      postedAt   TEXT,  -- ISO: YYYY-MM-DD HH:MM:SS,
+      isXPosted  INTEGER NOT NULL DEFAULT 0,
       createdAt  TEXT DEFAULT (datetime('now','localtime')),
       UNIQUE(groupName, urlId)
     );
