@@ -7,7 +7,7 @@ export async function xMain() {
 	const sqlForSelect = `
     SELECT * FROM posts
     WHERE isXPosted = 0
-    ORDER BY postedAt DESC
+    ORDER BY postedAt ASC
     LIMIT 10
     `;
 
