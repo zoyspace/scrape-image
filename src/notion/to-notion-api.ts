@@ -1,14 +1,5 @@
 // src/notion/insert-articles.ts
-
-export type ArticleWithImageType = {
-	memberName: string;
-	postedAt: string;
-	articleUrl: string;
-	title: string;
-	urlId: number;
-	groupName: string;
-	imageUrls: string[];
-};
+import type { ArticleWithImageType } from "../types/types.ts";
 
 // 環境変数
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
