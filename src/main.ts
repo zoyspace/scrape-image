@@ -1,5 +1,4 @@
 import pLimit from "p-limit";
-
 import { hinatazaka, nogizaka, sakurazaka } from "./constants/group.ts";
 import { closeClient, getClient } from "./db/turso-client.ts";
 import { duplicateCheckTurso } from "./db/turso-duplicate-check.ts";

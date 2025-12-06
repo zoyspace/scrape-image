@@ -6,7 +6,7 @@ const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const NOTION_VERSION = process.env.NOTION_VERSION; // あなたの環境に合わせて
 const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID;
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 /**
  * ArticleWithImageType 1件を Notion に登録する
@@ -122,7 +122,7 @@ export async function insertArticlesToNotion(articles: ArticleWithImageType[]) {
 			const indexStr = String(i + 1).padStart(2, "0");
 
 			await createNotionPageFromArticle(article, imageUrl, indexStr);
-			await sleep(330); // Rate limit: 3 requests per second
+			await Bun.sleep(330); // Rate limit: 3 requests per second
 		}
 	}
 }

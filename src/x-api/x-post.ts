@@ -20,7 +20,7 @@ export async function xPost(input: ArticleWithImageType) {
 		: groupName;
 
 	const postText = [
-		`${groupNameWithMark}${memberNameWithoutSpace}`,
+		`${groupNameWithMark} ${memberNameWithoutSpace}`,
 		postedAt,
 		articleUrl,
 	]
