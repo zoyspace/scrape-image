@@ -41,4 +41,8 @@ export async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_images_postedAt
       ON images (postedAt);
   `);
+	await client.execute(`
+    CREATE INDEX IF NOT EXISTS idx_posts_isXPosted_postedAt
+      ON posts (isXPosted, postedAt );
+  `);
 }
