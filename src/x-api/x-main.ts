@@ -8,7 +8,7 @@ export async function xMain() {
     SELECT * FROM posts
     WHERE isXPosted = 0
     ORDER BY postedAt ASC
-    LIMIT 10
+    LIMIT 4
     `;
 
 	const sqlForUpdate = `
@@ -57,6 +57,7 @@ export async function xMain() {
 		try {
 			await xPost(article);
 			await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
+
 		} catch (error) {
 			console.error("xPostでエラーが発生しました", {
 				articleId: article.id,
@@ -83,6 +84,7 @@ function isRateLimitError(error: unknown): boolean {
 	const e = error as any;
 	return e?.code === 429 || e?.status === 429 || e?.data?.status === 429;
 }
+
 if (import.meta.main) {
 	await xMain();
 }
