@@ -3,6 +3,7 @@ import { xPost } from "./x-post.ts";
 import { getClient, closeClient } from "../db/turso-client.ts";
 
 export async function xMain() {
+	console.log("X投稿開始");
 	const client = getClient();
 	const sqlForSelect = `
     SELECT * FROM posts
@@ -66,24 +67,17 @@ export async function xMain() {
 				error,
 			});
 
-			if (isRateLimitError(error)) {
+			if ((error as unknown as { code: number }).code === 429) {
 				console.error(
 					"レートリミット(429)に達したため、残りの記事の投稿をスキップします。",
 				);
-				break; // ← 残りの投稿は試さない
 			}
-
-			// その他のエラーはログだけ残して次の記事へ
+			break;
 		}
 	}
-	console.log("X投稿完了");
 	closeClient();
 }
-// 429判定用のヘルパー関数
-function isRateLimitError(error: unknown): boolean {
-	const e = error as any;
-	return e?.code === 429 || e?.status === 429 || e?.data?.status === 429;
-}
+
 
 if (import.meta.main) {
 	await xMain();
