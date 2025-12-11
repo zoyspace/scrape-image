@@ -9,7 +9,7 @@ export async function xMain() {
     SELECT * FROM posts
     WHERE isXPosted = 0
     ORDER BY postedAt ASC
-    LIMIT 4
+    LIMIT 20
     `;
 
 	const sqlForUpdate = `
