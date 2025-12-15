@@ -59,9 +59,7 @@ export async function getBlogImages(param: SakamichiType) {
 	await insertPostsTurso(groupName, newArticles);
 
 	const end = Date.now();
-	console.info(
-		`${groupName} Completed processing in ${(end - start) / 1000} seconds`,
-	);
+	console.info(`${groupName} Completed processing in ${(end - start) / 1000} seconds`);
 	return newArticles;
 }
 
