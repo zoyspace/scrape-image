@@ -1,6 +1,6 @@
-import type { ArticleWithImageType } from "../types/types.ts";
+import type { ArticleWithImageType } from "../../shared/types/types.ts";
 import { xPost } from "./x-post.ts";
-import { getClient, closeClient } from "../db/turso-client.ts";
+import { getClient, closeClient } from "../database/client.ts";
 
 export async function xMain() {
 	console.log("X投稿開始");
@@ -58,7 +58,6 @@ export async function xMain() {
 		try {
 			await xPost(article);
 			await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
-
 		} catch (error) {
 			console.error("xPostでエラーが発生しました", {
 				articleId: article.id,
@@ -77,7 +76,6 @@ export async function xMain() {
 	}
 	closeClient();
 }
-
 
 if (import.meta.main) {
 	await xMain();

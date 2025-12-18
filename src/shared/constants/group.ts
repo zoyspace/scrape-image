@@ -1,4 +1,4 @@
-import type { SakamichiType } from "../types/types";
+import type { SakamichiType } from "../types/types.ts";
 
 export const nogizaka: SakamichiType = {
 	groupName: "乃木坂46",

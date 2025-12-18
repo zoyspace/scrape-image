@@ -1,4 +1,4 @@
-import { getClient } from "./turso-client.ts";
+import { getClient } from "./client.ts";
 
 export async function ensureSchema() {
 	const client = getClient();

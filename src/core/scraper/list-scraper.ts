@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
-import type { ArticleType } from "./types/types.ts";
-import { toSQLiteDateTime } from "./utils/toSQLiteDateTime.ts";
+import type { ArticleType } from "../../shared/types/types.ts";
+import { toSQLiteDateTime } from "../../shared/utils/toSQLiteDateTime.ts";
 
 export async function fetchNewArticleList({
 	groupName,

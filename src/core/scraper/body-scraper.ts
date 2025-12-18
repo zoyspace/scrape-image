@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { toSQLiteDateTime } from "./utils/toSQLiteDateTime.ts";
+import { toSQLiteDateTime } from "../../shared/utils/toSQLiteDateTime.ts";
 
 export async function fetchBodyImageUrls({
 	articleUrl,

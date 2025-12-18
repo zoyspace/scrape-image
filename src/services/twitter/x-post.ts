@@ -1,5 +1,9 @@
-import { hinatazaka, nogizaka, sakurazaka } from "../constants/group.ts";
-import type { ArticleWithImageType } from "../types/types.ts";
+import {
+	hinatazaka,
+	nogizaka,
+	sakurazaka,
+} from "../../shared/constants/group.ts";
+import type { ArticleWithImageType } from "../../shared/types/types.ts";
 import { tweetWithRemoteImage } from "./x-api.ts";
 
 const { groupName: nogizakaGroupName } = nogizaka;

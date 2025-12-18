@@ -1,12 +1,10 @@
 // src/notion/insert-articles.ts
-import type { ArticleWithImageType } from "../types/types.ts";
+import type { ArticleWithImageType } from "../../shared/types/types.ts";
 
 // 環境変数
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const NOTION_VERSION = process.env.NOTION_VERSION; // あなたの環境に合わせて
 const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID;
-
-
 
 /**
  * ArticleWithImageType 1件を Notion に登録する
@@ -106,7 +104,7 @@ async function createNotionPageFromArticle(
 	if (!res.ok) {
 		console.error("Failed to create page:", JSON.stringify(data, null, 2));
 		throw new Error(
-			`Notion API error: ${res.status} ${res.statusText} - ${(data as any)?.message ?? ""}`,
+			`Notion API error: ${res.status} ${res.statusText} - ${(data as { message?: string })?.message ?? ""}`,
 		);
 	}
 	return data;
