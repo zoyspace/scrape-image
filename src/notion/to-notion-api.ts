@@ -116,8 +116,9 @@ async function createNotionPageFromArticle(
  * ArticleWithImageType[] をまとめて登録する
  */
 export async function insertArticlesToNotion(articles: ArticleWithImageType[]) {
+	console.log("Inserting notion pages", articles.length);
 	for (const article of articles) {
-		console.log("Inserting notion page", article.memberName);
+		console.log("notion page", article.memberName, article.postedAt);
 		for (const [i, imageUrl] of article.imageUrls.entries()) {
 			const indexStr = String(i + 1).padStart(2, "0");
 
