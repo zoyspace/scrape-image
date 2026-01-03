@@ -15,7 +15,7 @@ import { xMain } from "./x-api/x-main.ts";
 
 export async function getBlogImages(param: SakamichiType) {
 	const start = Date.now();
-	const limit = pLimit(3); // 最大5並列
+	const limit = pLimit(3); 
 	const { groupName, baseUrl, newPages, newListSelectors, bodySelectors } =
 		param;
 	console.info(`${groupName} Fetching new articles for ...`);
