@@ -13,9 +13,9 @@ on:
   #     - "bun.lock*"
   #     - ".github/workflows/scrape-image.yml"
 
-  # 8時間おきに自動実行（UTC 基準）
+  # UTC = JST - 9　日本時間では、7・12・19・21・22・24時
   schedule:
-    - cron: "0 7,12,19,21,22,0 * * *"
+    - cron: "0 22,3,10,12,13,15 * * *"
 
 jobs:
   run-scraper:
