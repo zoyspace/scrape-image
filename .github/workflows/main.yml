@@ -15,7 +15,7 @@ on:
 
   # 8時間おきに自動実行（UTC 基準）
   schedule:
-    - cron: "0 */5 * * *"
+    - cron: "0 7,12,19,21,22,0 * * *"
 
 jobs:
   run-scraper:
