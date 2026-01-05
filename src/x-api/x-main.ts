@@ -55,25 +55,8 @@ export async function xMain() {
 	});
 
 	for (const article of articles) {
-		try {
-			await xPost(article);
-			await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
-
-		} catch (error) {
-			console.error("xPostでエラーが発生しました", {
-				articleId: article.id,
-				urlId: article.urlId,
-				groupName: article.groupName,
-				error,
-			});
-
-			if ((error as unknown as { code: number }).code === 429) {
-				console.error(
-					"レートリミット(429)に達したため、残りの記事の投稿をスキップします。",
-				);
-			}
-			break;
-		}
+		await xPost(article);
+		await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
 	}
 	closeClient();
 }
