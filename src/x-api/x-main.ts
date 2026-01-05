@@ -1,3 +1,4 @@
+import { ApiResponseError } from "twitter-api-v2";
 import type { ArticleWithImageType } from "../types/types.ts";
 import { xPost } from "./x-post.ts";
 import { getClient, closeClient } from "../db/turso-client.ts";
@@ -55,12 +56,42 @@ export async function xMain() {
 	});
 
 	for (const article of articles) {
-		await xPost(article);
-		await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
+		try {
+			await xPost(article);
+			await client.execute({ sql: sqlForUpdate, args: { id: article.id } });
+		} catch (error) {
+			if (error instanceof ApiResponseError && error.code === 429) {
+				const reset =
+					error.headers["x-app-limit-24hour-reset"] || error.rateLimit?.reset;
+				if (reset) {
+					const resetTimestamp = Number(reset); // Ensure resetTimestamp is a number
+					const jstDate = new Date(resetTimestamp * 1000).toLocaleString(
+						"ja-JP",
+						{
+							timeZone: "Asia/Tokyo",
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit",
+							hour: "2-digit",
+							minute: "2-digit",
+							second: "2-digit",
+						},
+					);
+					console.error(
+						`X API レート制限(429)に達しました。解除予定時刻 (JST): ${jstDate}`,
+					);
+				} else {
+					console.error(
+						"X API レート制限(429)に達しました。解除時刻は不明です。",
+					);
+				}
+				break;
+			}
+			throw error;
+		}
 	}
 	closeClient();
 }
-
 
 if (import.meta.main) {
 	await xMain();
