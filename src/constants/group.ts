@@ -41,12 +41,12 @@ export const sakurazaka: SakamichiType = {
 export const hinatazaka: SakamichiType = {
 	groupName: "日向坂46",
 	baseUrl: "https://www.hinatazaka46.com",
-	newPages: "https://www.hinatazaka46.com/s/official/diary/member",
+	newPages: "https://www.hinatazaka46.com/s/official/diary/member/list",
 	newListSelectors: {
-		cards: "ul.p-blog-top__list > li.p-blog-top__item",
-		title: ".c-blog-top__title",
-		url: "a",
-		date: ".c-blog-top__date",
+		cards: "div.p-blog-article",
+		title: ".c-blog-article__title",
+		url: ".c-button-blog-detail",
+		date: ".c-blog-article__date",
 	},
 	bodySelectors: {
 		memberName: "div.c-blog-article__name > a",
