@@ -70,9 +70,9 @@ if (import.meta.main) {
 	const sakurazakaResult = await getBlogImages(sakurazaka);
 	closeClient();
 
-	// const newArticles: ArticleWithImageType[] = [...hinataResult, ...nogizakaResult, ...sakurazakaResult];
-	// const sortedArticles = [...newArticles].sort((a, b) =>
-	// 	b.postedAt > a.postedAt ? -1 : 1);
+	const newArticles: ArticleWithImageType[] = [...hinataResult, ...nogizakaResult, ...sakurazakaResult];
+	const sortedArticles = [...newArticles].sort((a, b) =>
+		b.postedAt > a.postedAt ? -1 : 1);
 
 	// await insertArticlesToNotion(sortedArticles);
 

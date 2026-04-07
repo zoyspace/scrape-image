@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary-fixed-variant": "#474746",
+            "on-error": "#ffffff",
+            "surface-tint": "#5f5e5e",
+            "on-secondary-fixed": "#0c006b",
+            "surface-dim": "#dadada",
+            "inverse-surface": "#2f3131",
+            "tertiary-fixed": "#e3dfff",
+            "on-tertiary-container": "#7871ff",
+            "inverse-on-surface": "#f1f1f1",
+            "on-primary-fixed": "#1c1b1b",
+            "tertiary-fixed-dim": "#c4c0ff",
+            "on-secondary-fixed-variant": "#332dbc",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed": "#100069",
+            "surface-bright": "#f9f9f9",
+            "on-primary-container": "#858383",
+            "on-surface": "#1a1c1c",
+            "on-error-container": "#93000a",
+            "background": "#f9f9f9",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed": "#e5e2e1",
+            "surface-container-high": "#e8e8e8",
+            "secondary-fixed-dim": "#c2c1ff",
+            "on-tertiary-fixed-variant": "#3622ca",
+            "on-primary": "#ffffff",
+            "primary-container": "#1c1b1b",
+            "on-surface-variant": "#444748",
+            "primary": "#000000",
+            "inverse-primary": "#c8c6c5",
+            "surface-container-low": "#f3f3f3",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#100069",
+            "surface": "#f9f9f9",
+            "primary-fixed-dim": "#c8c6c5",
+            "on-background": "#1a1c1c",
+            "on-secondary-container": "#fffbff",
+            "secondary": "#4a47d2",
+            "secondary-container": "#6462ec",
+            "error": "#ba1a1a",
+            "surface-variant": "#e2e2e2",
+            "outline-variant": "#c4c7c7",
+            "surface-container-highest": "#e2e2e2",
+            "tertiary": "#000000"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glass-nav {
+      backdrop-filter: blur(20px);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body class="text-on-surface">
+  <!-- TopAppBar -->
+  <header
+    class="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.04)] flex items-center justify-between px-6 py-4 w-full">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-neutral-900 dark:text-neutral-50"
+        style="font-variation-settings: &quot;FILL&quot; 1;">account_circle</span>
+      <h1 class="font-['Manrope'] font-bold tracking-tight text-xl text-neutral-900 dark:text-neutral-50" style="">The
+        Archivist</h1>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="font-['Inter'] text-[14px] font-semibold text-indigo-600 dark:text-indigo-400" href="#"
+        style="">Home</a>
+      <a class="font-['Inter'] text-[14px] font-medium text-neutral-500 dark:text-neutral-400 hover:opacity-80 transition-opacity"
+        href="#" style="">Scan</a>
+      <a class="font-['Inter'] text-[14px] font-medium text-neutral-500 dark:text-neutral-400 hover:opacity-80 transition-opacity"
+        href="#" style="">Settings</a>
+    </div>
+    <button class="md:hidden active:scale-95 duration-200" style="">
+      <span class="material-symbols-outlined text-neutral-900" style="">sort</span>
+    </button>
+  </header>
+  <main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-12">
+    <!-- Monthly Spending Card (The Archivist Style) -->
+    <section class="space-y-4">
+      <p class="font-['Inter'] text-[0.6875rem] font-medium tracking-widest text-on-surface-variant uppercase" style="">
+        Current Period Balance</p>
+      <div
+        class="bg-surface-container-lowest p-8 rounded-lg shadow-[0_32px_64px_-16px_rgba(0,0,0,0.03)] flex flex-col items-start relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+        <h2 class="font-['Manrope'] text-[3.5rem] font-extrabold tracking-tighter text-primary leading-none" style="">
+          $1,245.00
+        </h2>
+        <div class="mt-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary text-sm"
+            style="font-variation-settings: &quot;FILL&quot; 1;">trending_up</span>
+          <span class="text-on-surface-variant font-medium text-sm" style="">12% from last month</span>
+        </div>
+      </div>
+    </section>
+    <!-- Quick Scan CTA -->
+    <section class="flex flex-col items-center gap-6">
+      <button
+        class="w-full bg-gradient-to-br from-secondary to-secondary-container text-on-secondary p-6 rounded-lg flex items-center justify-center gap-3 shadow-[0_20px_40px_-12px_rgba(74,71,210,0.25)] hover:opacity-95 transition-all active:scale-95 group"
+        style="">
+        <span class="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform"
+          style="">document_scanner</span>
+        <span class="font-['Manrope'] font-bold text-lg tracking-tight" style="">スキャン実行</span>
+      </button>
+      <p class="text-on-surface-variant text-[0.8125rem] text-center max-w-[240px] leading-relaxed" style="">
+        Snap a photo and let the archivist categorize your spending automatically.
+      </p>
+    </section>
+    <!-- Recent Receipts Section -->
+    <section class="space-y-8">
+      <div class="flex items-center justify-between">
+        <h3 class="font-['Manrope'] text-2xl font-bold tracking-tight" style="">Recent Artifacts</h3>
+        <button class="text-secondary font-semibold text-sm hover:opacity-80" style="">View Archive</button>
+      </div>
+      <div class="space-y-4">
+        <!-- Receipt Item 1 -->
+        <div
+          class="group bg-surface-container-lowest p-5 rounded-lg flex items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center">
+              <span class="material-symbols-outlined text-on-surface" style="">coffee</span>
+            </div>
+            <div>
+              <h4 class="font-['Inter'] font-semibold text-on-surface" style="">Blue Bottle Coffee</h4>
+              <p class="font-['Inter'] text-[0.6875rem] text-on-surface-variant" style="">Nov 24, 2023 • 09:12 AM</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="font-['Manrope'] font-bold text-lg text-primary" style="">$12.45</span>
+            <div
+              class="bg-surface-container-highest px-2 py-0.5 rounded-full text-[10px] font-bold text-on-surface-variant mt-1 uppercase tracking-tighter"
+              style="">Meals</div>
+          </div>
+        </div>
+        <!-- Receipt Item 2 -->
+        <div
+          class="group bg-surface-container-lowest p-5 rounded-lg flex items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center">
+              <span class="material-symbols-outlined text-on-surface" style="">shopping_bag</span>
+            </div>
+            <div>
+              <h4 class="font-['Inter'] font-semibold text-on-surface" style="">Apple Store</h4>
+              <p class="font-['Inter'] text-[0.6875rem] text-on-surface-variant" style="">Nov 22, 2023 • 02:45 PM</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="font-['Manrope'] font-bold text-lg text-primary" style="">$199.00</span>
+            <div
+              class="bg-surface-container-highest px-2 py-0.5 rounded-full text-[10px] font-bold text-on-surface-variant mt-1 uppercase tracking-tighter"
+              style="">Hardware</div>
+          </div>
+        </div>
+        <!-- Receipt Item 3 -->
+        <div
+          class="group bg-surface-container-lowest p-5 rounded-lg flex items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center">
+              <span class="material-symbols-outlined text-on-surface" style="">commute</span>
+            </div>
+            <div>
+              <h4 class="font-['Inter'] font-semibold text-on-surface" style="">Uber Trip</h4>
+              <p class="font-['Inter'] text-[0.6875rem] text-on-surface-variant" style="">Nov 21, 2023 • 08:30 PM</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="font-['Manrope'] font-bold text-lg text-primary" style="">$34.20</span>
+            <div
+              class="bg-surface-container-highest px-2 py-0.5 rounded-full text-[10px] font-bold text-on-surface-variant mt-1 uppercase tracking-tighter"
+              style="">Travel</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Empty State Hint -->
+    <div class="pt-8 text-center">
+      <div class="inline-flex items-center justify-center w-12 h-12 bg-surface-container-low rounded-full mb-4">
+        <span class="material-symbols-outlined text-on-surface-variant" style="">history</span>
+      </div>
+      <p class="font-['Inter'] text-sm text-on-surface-variant italic" style="">End of recent history. Your archives are
+        secure.</p>
+    </div>
+  </main>
+  <!-- BottomNavBar -->
+  <nav
+    class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-white/80 dark:bg-black/80 backdrop-blur-xl border-t border-neutral-100/10 dark:border-neutral-800/10 shadow-[0_-8px_32px_0_rgba(0,0,0,0.04)] z-50 rounded-t-[2rem]">
+    <a class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 rounded-full px-5 py-2 active:scale-90 transition-transform duration-200"
+      href="#" style="">
+      <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">home_storage</span>
+      <span class="font-['Inter'] text-[11px] font-medium tracking-wide uppercase mt-1" style="">Home</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 px-5 py-2 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform duration-200"
+      href="#" style="">
+      <span class="material-symbols-outlined" style="">document_scanner</span>
+      <span class="font-['Inter'] text-[11px] font-medium tracking-wide uppercase mt-1" style="">Scan</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 px-5 py-2 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform duration-200"
+      href="#" style="">
+      <span class="material-symbols-outlined" style="">settings</span>
+      <span class="font-['Inter'] text-[11px] font-medium tracking-wide uppercase mt-1" style="">Settings</span>
+    </a>
+  </nav>
+</body>
+
+</html>
