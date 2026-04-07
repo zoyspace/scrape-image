@@ -18,8 +18,8 @@ export type ArticleWithImageType = {
 export type SakamichiType = {
 	groupName: string;
 	baseUrl: string;
-	newPages: string;
-	secondPage?: string;
+	newPage: string;
+	secondPage: string;
 	newListSelectors: {
 		cards: string;
 		title: string;

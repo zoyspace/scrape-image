@@ -5,20 +5,23 @@ import { toSQLiteDateTime } from "./utils/toSQLiteDateTime.ts";
 export async function fetchNewArticleList({
 	groupName,
 	baseUrl,
-	newPages,
+	newPage ,
+	secondPage,
 	newListSelectors,
 }: {
 	groupName: string;
 	baseUrl: string;
-	newPages: string;
+	newPage?: string;
+	secondPage?: string;
 	newListSelectors: { cards: string; title: string; url: string; date: string };
 }): Promise<ArticleType[]> {
 	const results: ArticleType[] = [];
 	const pattern = /detail\/(\d+)/;
-	const res = await fetch(newPages);
-	if (!res.ok) {
-		throw new Error(`HTTP Error: ${res.status}`);
-	}
+	const newUrl = newPage || secondPage;
+	if (!newUrl) {throw new Error("No new page URL provided");}
+
+	const res = await fetch(newUrl);
+	if (!res.ok) {throw new Error(`HTTP Error: ${res.status}`);}
 
 	const html = await res.text();
 	const $ = cheerio.load(html);

@@ -3,7 +3,8 @@ import type { SakamichiType } from "../types/types";
 export const nogizaka: SakamichiType = {
 	groupName: "乃木坂46",
 	baseUrl: "https://www.nogizaka46.com",
-	newPages: "https://www.nogizaka46.com/s/n46/diary/MEMBER/list",
+	newPage: "https://www.nogizaka46.com/s/n46/diary/MEMBER/list",
+	secondPage:"https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1805&page=1&cd=MEMBER",
 	newListSelectors: {
 		cards: ".bl--card", // 各ブログカード要素
 		title: ".bl--card__ttl", // ブログタイトル
@@ -22,7 +23,8 @@ export const nogizaka: SakamichiType = {
 export const sakurazaka: SakamichiType = {
 	groupName: "櫻坂46",
 	baseUrl: "https://www.sakurazaka46.com",
-	newPages: "https://sakurazaka46.com/s/s46/diary/blog/list?ima=0000",
+	newPage: "https://sakurazaka46.com/s/s46/diary/blog/list?ima=0000",
+	secondPage:"https://sakurazaka46.com/s/s46/diary/blog/list?page=1&cd=blog",
 	newListSelectors: {
 		cards: "ul.com-blog-part.box4.fxpc > li.box", // 各ブログカード要素
 		title: ".date-title .title", // ブログタイトル
@@ -41,7 +43,8 @@ export const sakurazaka: SakamichiType = {
 export const hinatazaka: SakamichiType = {
 	groupName: "日向坂46",
 	baseUrl: "https://www.hinatazaka46.com",
-	newPages: "https://www.hinatazaka46.com/s/official/diary/member/list",
+	newPage: "https://www.hinatazaka46.com/s/official/diary/member/list",
+	secondPage:"https://www.hinatazaka46.com/s/official/diary/member/list?ima=0000&page=1&cd=member",
 	newListSelectors: {
 		cards: "div.p-blog-article",
 		title: ".c-blog-article__title",
