@@ -51,7 +51,7 @@ export async function getBlogImages(param: SakamichiType) {
 		const urlIdList2 = newBlogs2.map((blog) => blog.urlId);
 		// const notFoundTurso = await duplicateCheckTurso(groupName, urlIdList);
 		const notFoundTurso2 = await duplicateCheckTurso(groupName, urlIdList2);
-		const blogList2 = newBlogs.filter((item) =>
+		const blogList2 = newBlogs2.filter((item) =>
 			notFoundTurso2.includes(item.urlId),
 		);
 		if (notFoundTurso2.length === 0) {
