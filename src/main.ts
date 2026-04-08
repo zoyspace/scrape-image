@@ -39,11 +39,12 @@ export async function getBlogImages(param: SakamichiType) {
 	const blogList = newBlogs.filter((item) =>
 		notFoundTurso.includes(item.urlId),
 	);
+
 	if (notFoundTurso.length === 0) {
 		const newBlogs2: ArticleType[] = await fetchNewArticleList({
 			groupName,
 			baseUrl,
-			secondPage,
+			secondPage, //secondPage
 			newListSelectors,
 		});
 
