@@ -80,14 +80,16 @@ export async function getBlogImages(param: SakamichiType) {
 			}),
 		),
 	);
-
-	await insertPosts(groupName, newArticles);
+	const sortedArticles = newArticles.toSorted((a, b) =>
+		a.postedAt.localeCompare(b.postedAt),
+	)	;
+	await insertPosts(groupName, sortedArticles);
 
 	const end = Date.now();
 	console.info(
 		`${groupName} Completed processing in ${(end - start) / 1000} seconds`,
 	);
-	return newArticles;
+	return sortedArticles;
 }
 
 if (import.meta.main) {
