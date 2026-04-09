@@ -35,7 +35,7 @@ export async function getBlogImages(param: SakamichiType) {
 	const notFoundIds = await duplicateCheck(groupName, urlIdList);
 	const blogList = newBlogs.filter((item) => notFoundIds.includes(item.urlId));
 
-	if (notFoundIds.length === 0) {
+	if (notFoundIds.length === urlIdList.length) {
 		const newBlogs2: ArticleType[] = await fetchList({
 			groupName,
 			baseUrl,
@@ -48,7 +48,7 @@ export async function getBlogImages(param: SakamichiType) {
 		const blogList2 = newBlogs2.filter((item) =>
 			notFoundIds2.includes(item.urlId),
 		);
-		if (notFoundIds2.length === 0) {
+		if (notFoundIds2.length === urlIdList2.length) {
 			console.warn(
 				groupName,
 				"⚠️最新記事取得漏れの可能性があります!!!",
