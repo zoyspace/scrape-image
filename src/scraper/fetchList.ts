@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio";
-import type { ArticleType } from "./types/types.ts";
-import { toSQLiteDateTime } from "./utils/toSQLiteDateTime.ts";
+import type { ArticleType } from "../types/index.ts";
+import { toSQLiteDateTime } from "../utils/date.ts";
 
-export async function fetchNewArticleList({
+export async function fetchList({
 	groupName,
 	baseUrl,
-	newPage ,
+	newPage,
 	secondPage,
 	newListSelectors,
 }: {
@@ -17,11 +17,15 @@ export async function fetchNewArticleList({
 }): Promise<ArticleType[]> {
 	const results: ArticleType[] = [];
 	const pattern = /detail\/(\d+)/;
-	const newUrl = newPage || secondPage;
-	if (!newUrl) {throw new Error("No new page URL provided");}
+	const targetUrl = newPage || secondPage;
+	if (!targetUrl) {
+		throw new Error("No new page URL provided");
+	}
 
-	const res = await fetch(newUrl);
-	if (!res.ok) {throw new Error(`HTTP Error: ${res.status}`);}
+	const res = await fetch(targetUrl);
+	if (!res.ok) {
+		throw new Error(`HTTP Error: ${res.status}`);
+	}
 
 	const html = await res.text();
 	const $ = cheerio.load(html);
@@ -53,5 +57,3 @@ export async function fetchNewArticleList({
 	console.log(`${groupName} found ${results.length} articles`);
 	return results;
 }
-
-// if (import.meta.main) { await fetchNewArticleList(); }

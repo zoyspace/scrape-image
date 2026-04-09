@@ -1,12 +1,11 @@
-// src/db/turso-insert.ts
 import type {
 	InsertPostInput,
 	InsertResult,
 	LibSQLExecuteResult,
-} from "../types/types.ts";
-import { getClient } from "./turso-client.ts";
+} from "../types/index.ts";
+import { getClient } from "./client.ts";
 
-export async function insertPostsTurso(
+export async function insertPosts(
 	groupName: string,
 	insertData: InsertPostInput[],
 ): Promise<InsertResult> {
@@ -23,7 +22,7 @@ export async function insertPostsTurso(
 		const postIds: number[] = [];
 
 		for (const p of insertData) {
-			// 1) posts を UPSERT して id を取得（SQLite 互換の ON CONFLICT DO UPDATE ... RETURNING）
+			// posts を UPSERT して id を取得（ON CONFLICT DO NOTHING ... RETURNING）
 			const postRes: LibSQLExecuteResult = await tx.execute({
 				sql: `INSERT INTO posts (groupName, memberName, title, urlId, articleUrl, postedAt)
           VALUES (:groupName, :memberName, :title, :urlId, :articleUrl, :postedAt)
@@ -38,37 +37,20 @@ export async function insertPostsTurso(
 					":postedAt": p.postedAt,
 				},
 			});
-			// console.log("postRes:", postRes);
-			// {
-			//     columns: [ "id" ],
-			//     columnTypes: [ "INTEGER" ],
-			//     rows: [
-			//       {
-			//         "0": 81,
-			//         length: 1,
-			//         id: 81,
-			//       }
-			//     ],
-			//     rowsAffected: 1,
-			//     lastInsertRowid: 81n,
-			//     toJSON: [Function: toJSON],
-			// }
 
 			const postId = Number(postRes.rows[0]?.id);
-			// if (!Number.isFinite(postId)) {
-			//   throw new Error("Failed to obtain post id");
-			// }
 			postIds.push(postId);
 
-			postInserted += 1;
+			// rowsAffected で実際に挿入された件数を加算（DO NOTHING 時は 0）
+			postInserted += postRes.rowsAffected;
 
 			if (p.imageUrls?.length) {
-				// libSQL は batch をサポート（2024以降）しているので、まとめて実行して往復回数を減らす。
+				// libSQL batch で往復回数を削減
 				const imgResults = await tx.batch(
 					p.imageUrls.map((url) => ({
 						sql: `INSERT INTO images (postId, memberName, postedAt, imageUrl)
-               				VALUES (:postId, :memberName, :postedAt, :imageUrl)
-               				ON CONFLICT(postId, imageUrl) DO NOTHING;`,
+               			VALUES (:postId, :memberName, :postedAt, :imageUrl)
+               			ON CONFLICT(postId, imageUrl) DO NOTHING;`,
 						args: {
 							":postId": postId,
 							":memberName": p.memberName,
@@ -77,30 +59,12 @@ export async function insertPostsTurso(
 						},
 					})),
 				);
-				// console.log("imgResults:", imgResults);
-				//       imgResults: [
-				// ResultSetImpl {
-				//   columns: [],
-				//   columnTypes: [],
-				//   rows: [],
-				//   rowsAffected: 1,
-				//   lastInsertRowid: 297n,
-				//   toJSON: [Function: toJSON],
-				// }, ResultSetImpl {
-				//   columns: [],
-				//   columnTypes: [],
-				//   rows: [],
-				//   rowsAffected: 1,
-				//   lastInsertRowid: 298n,
-				//   toJSON: [Function: toJSON],
-				// }, ResultSetImpl
-				// rowsAffected は挿入時 1、重複時 0
 				for (const imgRes of imgResults) {
 					imageInserted += imgRes.rowsAffected;
 				}
-				// imageInserted += imgResults.map(r => r.rowsAffected ?? 0).reduce((a, b) => a + b, 0);
 			}
 		}
+
 		console.log(
 			groupName,
 			"postInserted:",
@@ -116,10 +80,9 @@ export async function insertPostsTurso(
 	}
 }
 
-// 単一 DB への ping
+/** 接続確認用 ping */
 export async function ping(): Promise<boolean> {
 	const client = getClient();
-
 	const r = await client.execute("SELECT 1 as ok");
 	return r.rows[0]?.ok === 1;
 }

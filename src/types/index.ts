@@ -50,21 +50,23 @@ export type InsertResult = {
 	imageInserted: number;
 	postUpsertedIds: number[];
 };
+
 export type LibSQLExecuteResult = {
 	columns: string[];
 	columnTypes: string[];
 	rows: Record<string, unknown>[];
-	rowsAffected: number; // 必須
-	lastInsertRowid?: bigint; // INSERT 時のみ
+	rowsAffected: number;
+	lastInsertRowid?: bigint;
 	toJSON: () => unknown;
 };
+
 export type NotionRow = {
-  id: number;
-  group: string;
-  member: string | null;
-  title: string | null;
-  blog: string;
-  image: string | null;
-  postedAt: string | null;   // "YYYY-MM-DD HH:MM:SS"
-  from:string;
+	id: number;
+	group: string;
+	member: string | null;
+	title: string | null;
+	blog: string;
+	image: string | null;
+	postedAt: string | null; // "YYYY-MM-DD HH:MM:SS"
+	from: string;
 };

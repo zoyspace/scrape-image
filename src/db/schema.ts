@@ -1,4 +1,4 @@
-import { getClient } from "./turso-client.ts";
+import { getClient } from "./client.ts";
 
 export async function ensureSchema() {
 	const client = getClient();
@@ -41,8 +41,9 @@ export async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_images_postedAt
       ON images (postedAt);
   `);
+
 	await client.execute(`
     CREATE INDEX IF NOT EXISTS idx_posts_isXPosted_postedAt
-      ON posts (isXPosted, postedAt );
+      ON posts (isXPosted, postedAt);
   `);
 }

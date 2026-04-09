@@ -1,10 +1,8 @@
-// src/notion/print-structure.ts
+// notion/fetchDataSource.ts から移動
+// データソースの構造確認用スクリプト（開発用途）
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const NOTION_VERSION = process.env.NOTION_VERSION ?? "2025-09-03";
 const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID;
-
-if (!NOTION_API_KEY) throw new Error("NOTION_API_KEY is not set");
-if (!NOTION_DATA_SOURCE_ID) throw new Error("NOTION_DATA_SOURCE_ID is not set");
 
 type NotionProperty = {
 	id: string;
@@ -25,6 +23,10 @@ type DataSourceResponse = {
 };
 
 async function fetchDataSource(): Promise<DataSourceResponse> {
+	if (!NOTION_API_KEY) throw new Error("NOTION_API_KEY is not set");
+	if (!NOTION_DATA_SOURCE_ID)
+		throw new Error("NOTION_DATA_SOURCE_ID is not set");
+
 	const res = await fetch(
 		`https://api.notion.com/v1/data_sources/${NOTION_DATA_SOURCE_ID}`,
 		{
@@ -64,19 +66,20 @@ function printDataSourceStructure(ds: DataSourceResponse) {
 		console.log(`- ${name}`);
 		console.log(`    id  : ${prop.id}`);
 		console.log(`    type: ${prop.type}`);
-		// 型ごとの詳細を少しだけ表示（select の options など）
-		if (prop.type === "select" && (prop as any).select?.options) {
-			const options = (prop as any).select.options as { name: string }[];
+		const propWithOptions = prop as NotionProperty & {
+			select?: { options: { name: string }[] };
+			status?: { options: { name: string }[] };
+		};
+		if (prop.type === "select" && propWithOptions.select?.options) {
+			const options = propWithOptions.select.options;
 			console.log(
 				`    options: ${options.map((o) => o.name).join(", ") || "(none)"}`,
 			);
 		}
-		if (prop.type === "status" && (prop as any).status?.options) {
-			const options = (prop as any).status.options as { name: string }[];
+		if (prop.type === "status" && propWithOptions.status?.options) {
+			const options = propWithOptions.status.options;
 			console.log(
-				`    status options: ${options
-					.map((o) => o.name)
-					.join(", ") || "(none)"}`,
+				`    status options: ${options.map((o) => o.name).join(", ") || "(none)"}`,
 			);
 		}
 	}
@@ -85,11 +88,13 @@ function printDataSourceStructure(ds: DataSourceResponse) {
 async function main() {
 	console.log("Fetching Notion data source structure...");
 	const ds = await fetchDataSource();
-	console.log("ds",ds);
+	console.log("ds", ds);
 	printDataSourceStructure(ds);
 }
 
-main().catch((err) => {
-	console.error(err);
-	process.exit(1);
-});
+if (import.meta.main) {
+	main().catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
+}

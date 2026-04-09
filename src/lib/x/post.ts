@@ -1,10 +1,11 @@
-import { hinatazaka, nogizaka, sakurazaka } from "../constants/group.ts";
-import type { ArticleWithImageType } from "../types/types.ts";
-import { tweetWithRemoteImage } from "./x-api.ts";
+import { hinatazaka, nogizaka, sakurazaka } from "../../config/groups.ts";
+import type { ArticleWithImageType } from "../../types/index.ts";
+import { tweetWithRemoteImage } from "./client.ts";
 
 const { groupName: nogizakaGroupName } = nogizaka;
 const { groupName: hinatazakaGroupName } = hinatazaka;
 const { groupName: sakurazakaGroupName } = sakurazaka;
+
 const marks: Record<string, string> = {
 	[nogizakaGroupName]: "🟣",
 	[hinatazakaGroupName]: "🩵",
@@ -13,7 +14,8 @@ const marks: Record<string, string> = {
 
 export async function xPost(input: ArticleWithImageType) {
 	const { memberName, imageUrls, postedAt, groupName, articleUrl } = input;
-	const memberNameWithoutSpace = memberName.replace(" ", "");
+	// 全角・半角スペースをすべて除去
+	const memberNameWithoutSpace = memberName.replaceAll(" ", "");
 
 	const groupNameWithMark = marks[groupName]
 		? `${marks[groupName]}${groupName}${marks[groupName]}`

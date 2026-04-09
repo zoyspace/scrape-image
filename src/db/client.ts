@@ -5,8 +5,10 @@ const TOKEN = process.env.TURSO_AUTH_TOKEN;
 
 let _client: Client | null = null;
 
-// 複数回呼び出しても同じクライアントを返す。（シングルトン）
-// 個別でclientを使用した場合は、複数の接続が発生する可能性があるので、このファイルでクライアントを管理する。
+/**
+ * シングルトンのDBクライアントを返す。
+ * 複数回呼び出しても同じクライアントを返す（シングルトンパターン）。
+ */
 export function getClient(): Client {
 	if (!TOKEN) throw new Error("TURSO_AUTH_TOKEN is not set");
 	if (!URL) throw new Error("TURSO_DATABASE_URL is not set");

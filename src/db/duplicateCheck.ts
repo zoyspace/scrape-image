@@ -1,16 +1,18 @@
-import { getClient } from "./turso-client.ts";
+import { getClient } from "./client.ts";
 
-export async function duplicateCheckTurso(
+/**
+ * DB に存在しない urlId の一覧を返す（IN句を使った重複チェック）
+ */
+export async function duplicateCheck(
 	groupName: string,
 	inputUrlIds: number[],
 ): Promise<number[]> {
 	const client = getClient();
-
 	const existingSet = new Set<number>();
 
 	if (inputUrlIds.length > 0) {
 		const names = inputUrlIds.map((_, i) => `:id${i}`);
-		const sql = `SELECT urlId FROM posts WHERE groupName = :groupName AND urlId 
+		const sql = `SELECT urlId FROM posts WHERE groupName = :groupName AND urlId
 			IN (${names.join(",")})`;
 
 		const args: Record<string, number | string> = {
@@ -22,18 +24,14 @@ export async function duplicateCheckTurso(
 
 		const res = await client.execute({ sql, args });
 		for (const row of res.rows) {
-			const urlId = row.urlId;
-			const v = Number(urlId);
+			const v = Number(row.urlId);
 			if (Number.isFinite(v)) existingSet.add(v);
 		}
 	}
 
-	// 見つからなかった id を返す
 	const notFound = inputUrlIds.filter((id) => !existingSet.has(id));
 	console.log(
 		`${groupName} Duplicate check found:${existingSet.size}, not found:${notFound.length}.`,
 	);
-	
-
 	return notFound;
 }

@@ -1,7 +1,7 @@
 import { ApiResponseError } from "twitter-api-v2";
-import type { ArticleWithImageType } from "../types/types.ts";
-import { xPost } from "./x-post.ts";
-import { getClient, closeClient } from "../db/turso-client.ts";
+import { closeClient, getClient } from "../../db/client.ts";
+import type { ArticleWithImageType } from "../../types/index.ts";
+import { xPost } from "./post.ts";
 
 export async function xMain() {
 	console.log("X投稿開始");
@@ -18,6 +18,7 @@ export async function xMain() {
     SET isXPosted = 1
     WHERE id = :id
     `;
+
 	const articlesRaw = await client.execute(sqlForSelect);
 	const articles: (ArticleWithImageType & { id: number })[] =
 		articlesRaw.rows.map((row) => ({
@@ -30,16 +31,13 @@ export async function xMain() {
 			postedAt: row.postedAt as string,
 			imageUrls: [],
 		}));
-	const ids = articles.map(() => `?`);
+
+	const ids = articles.map(() => "?");
 	const sqlForImageSelect = `
     SELECT * FROM images
     WHERE postId IN (${ids.join(",")})
     `;
-	const args: number[] = [];
-	ids.forEach((_, i) => {
-		if (!articles[i]) return;
-		args.push(articles[i].id);
-	});
+	const args: number[] = articles.map((a) => a.id);
 
 	const imageRaw = await client.execute(sqlForImageSelect, args);
 	const imageList = imageRaw.rows.map((row) => ({
@@ -64,7 +62,7 @@ export async function xMain() {
 				const reset =
 					error.headers["x-app-limit-24hour-reset"] || error.rateLimit?.reset;
 				if (reset) {
-					const resetTimestamp = Number(reset); // Ensure resetTimestamp is a number
+					const resetTimestamp = Number(reset);
 					const jstDate = new Date(resetTimestamp * 1000).toLocaleString(
 						"ja-JP",
 						{

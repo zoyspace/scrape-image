@@ -1,4 +1,8 @@
-import { getClient } from "./turso-client.ts";
+/**
+ * クエリプラン確認スクリプト（開発用）
+ * 実行: bun run scripts/explainTest.ts
+ */
+import { getClient } from "../src/db/client.ts";
 
 async function main() {
 	const client = getClient();
@@ -6,12 +10,12 @@ async function main() {
 
 	console.log("--- Query 1: MAX(urlId) ---");
 	const q1 = await client.execute({
-		sql: `EXPLAIN QUERY PLAN SELECT MAX(urlId) FROM posts WHERE groupName = ?`,
+		sql: "EXPLAIN QUERY PLAN SELECT MAX(urlId) FROM posts WHERE groupName = ?",
 		args: [groupName],
 	});
 	console.log(q1.rows);
 
-	console.log("\n--- Query 2");
+	console.log("\n--- Query 2: IN句での重複チェック ---");
 	const q2 = await client.execute({
 		sql: `EXPLAIN QUERY PLAN SELECT urlId
       FROM posts
@@ -36,4 +40,9 @@ async function main() {
 	console.log(q2.rows);
 }
 
-main();
+if (import.meta.main) {
+	main().catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
+}
