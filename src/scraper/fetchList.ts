@@ -54,6 +54,6 @@ export async function fetchList({
 		results.push({ title, articleUrl, postedAt, urlId });
 	});
 
-	console.log(`${groupName} found ${results.length} articles`);
+	console.log(`${groupName} ${results.length} articles`);
 	return results;
 }
