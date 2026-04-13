@@ -19,7 +19,7 @@ export type SakamichiType = {
 	groupName: string;
 	baseUrl: string;
 	newPage: string;
-	secondPage: string;
+	nextPage: string;
 	newListSelectors: {
 		cards: string;
 		title: string;

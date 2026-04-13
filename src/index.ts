@@ -11,6 +11,15 @@ import type {
 	SakamichiType,
 } from "./types/index.ts";
 
+export function makeUrlList(maxPag: number, newPage: string, nextPage: string) {
+	const urlList = [newPage];
+	maxPag > 1 && urlList.push(nextPage);
+	for (let i = 2; i < maxPag; i++) {
+		urlList.push(nextPage.replace("page=1", `page=${i}`));
+	}
+	return urlList;
+}
+
 export async function getBlogImages(param: SakamichiType) {
 	const start = Date.now();
 	const limit = pLimit(3);
@@ -18,45 +27,35 @@ export async function getBlogImages(param: SakamichiType) {
 		groupName,
 		baseUrl,
 		newPage,
-		secondPage,
+		nextPage,
 		newListSelectors,
 		bodySelectors,
 	} = param;
-	console.info(`${groupName} Fetching new articles for ...`);
+	const maxPag = 3;
+	const urlList = makeUrlList(maxPag, newPage, nextPage);
 
-	const newBlogs: ArticleType[] = await fetchList({
-		groupName,
-		baseUrl,
-		newPage,
-		newListSelectors,
-	});
+	const blogList: ArticleType[] = [];
+	for (const [index, url] of urlList.entries()) {
+		console.log(url);
 
-	const urlIdList = newBlogs.map((blog) => blog.urlId);
-	const notFoundIds = await duplicateCheck(groupName, urlIdList);
-	const blogList = newBlogs.filter((item) => notFoundIds.includes(item.urlId));
-
-	if (notFoundIds.length === urlIdList.length) {
-		const newBlogs2: ArticleType[] = await fetchList({
+		const newBlogs: ArticleType[] = await fetchList({
 			groupName,
 			baseUrl,
-			secondPage,
+			newPage,
 			newListSelectors,
 		});
-
-		const urlIdList2 = newBlogs2.map((blog) => blog.urlId);
-		const notFoundIds2 = await duplicateCheck(groupName, urlIdList2);
-		const blogList2 = newBlogs2.filter((item) =>
-			notFoundIds2.includes(item.urlId),
+		const urlIdList = newBlogs.map((blog) => blog.urlId);
+		const notFoundIds = await duplicateCheck(groupName, urlIdList);
+		blogList.push(
+			...newBlogs.filter((item) => notFoundIds.includes(item.urlId)),
 		);
-		if (notFoundIds2.length === urlIdList2.length) {
-			console.warn(
-				groupName,
-				"⚠️最新記事取得漏れの可能性があります!!!",
-				urlIdList2.join(","),
-			);
-			process.exitCode = 1; // GitHub Actions でエラー通知をトリガーする
-		}
-		blogList.push(...blogList2);
+
+		if (notFoundIds.length === urlIdList.length) {
+			if (index === urlList.length - 1) {
+				console.warn(groupName, "⚠️最新記事取得漏れの可能性があります!!!");
+				process.exitCode = 1; // GitHub Actions でエラー通知をトリガーする
+			} 
+		}else break;
 	}
 
 	const newArticles: ArticleWithImageType[] = await Promise.all(
@@ -82,7 +81,7 @@ export async function getBlogImages(param: SakamichiType) {
 	);
 	const sortedArticles = newArticles.toSorted((a, b) =>
 		a.postedAt.localeCompare(b.postedAt),
-	)	;
+	);
 	await insertPosts(groupName, sortedArticles);
 
 	const end = Date.now();
@@ -99,9 +98,9 @@ if (import.meta.main) {
 	const sakurazakaResult = await getBlogImages(sakurazaka);
 	closeClient();
 
-	const _newArticles: ArticleWithImageType[] = [
-		...hinataResult,
-		...nogizakaResult,
-		...sakurazakaResult,
-	];
+	// const _newArticles: ArticleWithImageType[] = [
+	// 	...hinataResult,
+	// 	...nogizakaResult,
+	// 	...sakurazakaResult,
+	// ];
 }

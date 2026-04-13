@@ -4,8 +4,8 @@ export const nogizaka: SakamichiType = {
 	groupName: "乃木坂46",
 	baseUrl: "https://www.nogizaka46.com",
 	newPage: "https://www.nogizaka46.com/s/n46/diary/MEMBER/list",
-	secondPage:
-		"https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1805&page=1&cd=MEMBER",
+	nextPage:
+		"https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=3840&page=1&cd=MEMBER",
 	newListSelectors: {
 		cards: ".bl--card",
 		title: ".bl--card__ttl",
@@ -24,7 +24,7 @@ export const sakurazaka: SakamichiType = {
 	groupName: "櫻坂46",
 	baseUrl: "https://www.sakurazaka46.com",
 	newPage: "https://sakurazaka46.com/s/s46/diary/blog/list?ima=0000",
-	secondPage: "https://sakurazaka46.com/s/s46/diary/blog/list?page=1&cd=blog",
+	nextPage: "https://sakurazaka46.com/s/s46/diary/blog/list?page=1&cd=blog",
 	newListSelectors: {
 		cards: "ul.com-blog-part.box4.fxpc > li.box",
 		title: ".date-title .title",
@@ -43,7 +43,7 @@ export const hinatazaka: SakamichiType = {
 	groupName: "日向坂46",
 	baseUrl: "https://www.hinatazaka46.com",
 	newPage: "https://www.hinatazaka46.com/s/official/diary/member/list",
-	secondPage:
+	nextPage:
 		"https://www.hinatazaka46.com/s/official/diary/member/list?ima=0000&page=1&cd=member",
 	newListSelectors: {
 		cards: "div.p-blog-article",

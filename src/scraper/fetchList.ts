@@ -6,18 +6,18 @@ export async function fetchList({
 	groupName,
 	baseUrl,
 	newPage,
-	secondPage,
+	nextPage,
 	newListSelectors,
 }: {
 	groupName: string;
 	baseUrl: string;
 	newPage?: string;
-	secondPage?: string;
+	nextPage?: string;
 	newListSelectors: { cards: string; title: string; url: string; date: string };
 }): Promise<ArticleType[]> {
 	const results: ArticleType[] = [];
 	const pattern = /detail\/(\d+)/;
-	const targetUrl = newPage || secondPage;
+	const targetUrl = newPage || nextPage;
 	if (!targetUrl) {
 		throw new Error("No new page URL provided");
 	}
