@@ -27,9 +27,9 @@ export const sakurazaka: SakamichiType = {
 	nextPage: "https://sakurazaka46.com/s/s46/diary/blog/list?page=1&cd=blog",
 	newListSelectors: {
 		cards: "ul.com-blog-part.box4.fxpc > li.box",
-		title: ".date-title .title",
+		title: "h3.title",
 		url: "a",
-		date: ".date-title .date",
+		date: "p.date",
 	},
 	bodySelectors: {
 		memberName: "div.com-hero-title > .inner",

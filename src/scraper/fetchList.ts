@@ -3,21 +3,18 @@ import type { ArticleType } from "../types/index.ts";
 import { toSQLiteDateTime } from "../utils/date.ts";
 
 export async function fetchList({
-	groupName,
+  groupName,
 	baseUrl,
-	newPage,
-	nextPage,
+	targetUrl,
 	newListSelectors,
 }: {
 	groupName: string;
 	baseUrl: string;
-	newPage?: string;
-	nextPage?: string;
+	targetUrl: string;
 	newListSelectors: { cards: string; title: string; url: string; date: string };
 }): Promise<ArticleType[]> {
 	const results: ArticleType[] = [];
 	const pattern = /detail\/(\d+)/;
-	const targetUrl = newPage || nextPage;
 	if (!targetUrl) {
 		throw new Error("No new page URL provided");
 	}

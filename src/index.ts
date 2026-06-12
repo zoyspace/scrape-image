@@ -13,16 +13,17 @@ import type {
 
 export function makeUrlList(maxPag: number, newPage: string, nextPage: string) {
 	const urlList = [newPage];
-	maxPag > 1 && urlList.push(nextPage);
+	if (maxPag > 1) urlList.push(nextPage);
 	for (let i = 2; i < maxPag; i++) {
 		urlList.push(nextPage.replace("page=1", `page=${i}`));
-	}
+  }
+
 	return urlList;
 }
 
 export async function getBlogImages(param: SakamichiType) {
 	const start = Date.now();
-	const limit = pLimit(3);
+	const limit = pLimit(2);
 	const {
 		groupName,
 		baseUrl,
@@ -34,18 +35,20 @@ export async function getBlogImages(param: SakamichiType) {
 	const maxPag = 3;
 	const urlList = makeUrlList(maxPag, newPage, nextPage);
 
-	const blogList: ArticleType[] = [];
-	for (const [index, url] of urlList.entries()) {
-		console.log(url);
+  const blogList: ArticleType[] = [];
+	console.log("urlList", urlList);
+	for (const [index, targetUrl] of urlList.entries()) {
+		console.log(targetUrl);
 
 		const newBlogs: ArticleType[] = await fetchList({
-			groupName,
-			baseUrl,
-			newPage,
+      groupName,
+      baseUrl,
+			targetUrl,
 			newListSelectors,
 		});
-		const urlIdList = newBlogs.map((blog) => blog.urlId);
-		const notFoundIds = await duplicateCheck(groupName, urlIdList);
+    const urlIdList = newBlogs.map((blog) => blog.urlId);
+		
+    const notFoundIds = await duplicateCheck(groupName, urlIdList);
 		blogList.push(
 			...newBlogs.filter((item) => notFoundIds.includes(item.urlId)),
 		);
@@ -93,8 +96,8 @@ export async function getBlogImages(param: SakamichiType) {
 
 if (import.meta.main) {
 	getClient();
-	const hinataResult = await getBlogImages(hinatazaka);
-	const nogizakaResult = await getBlogImages(nogizaka);
+	// const hinataResult = await getBlogImages(hinatazaka);
+	// const nogizakaResult = await getBlogImages(nogizaka);
 	const sakurazakaResult = await getBlogImages(sakurazaka);
 	closeClient();
 
