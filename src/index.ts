@@ -96,8 +96,8 @@ export async function getBlogImages(param: SakamichiType) {
 
 if (import.meta.main) {
 	getClient();
-	// const hinataResult = await getBlogImages(hinatazaka);
-	// const nogizakaResult = await getBlogImages(nogizaka);
+	const hinataResult = await getBlogImages(hinatazaka);
+	const nogizakaResult = await getBlogImages(nogizaka);
 	const sakurazakaResult = await getBlogImages(sakurazaka);
 	closeClient();
 
