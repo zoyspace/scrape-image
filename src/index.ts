@@ -36,7 +36,6 @@ export async function getBlogImages(param: SakamichiType) {
 	const urlList = makeUrlList(maxPag, newPage, nextPage);
 
   const blogList: ArticleType[] = [];
-	console.log("urlList", urlList);
 	for (const [index, targetUrl] of urlList.entries()) {
 		console.log(targetUrl);
 

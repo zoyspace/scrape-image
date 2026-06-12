@@ -31,7 +31,7 @@ export async function duplicateCheck(
 
 	const notFound = inputUrlIds.filter((id) => !existingSet.has(id));
 	console.log(
-		`${groupName} Duplicate check found:${existingSet.size}, not found:${notFound.length}.`,
+		`${groupName} Duplicate check found:${existingSet.size},  NotFound:${notFound.length}.`,
 	);
 	return notFound;
 }
